@@ -1,5 +1,12 @@
+# tests/test_arvore_b.py
 import pytest
 from arvore_b.btree import BTree
+from arvore_b.bnode import BNode
+from arvore_b.contratos import (
+    pos_raiz_chaves, pos_no_interno_chaves, pos_raiz_filhos,
+    pos_no_interno_filhos, pre_inserir, pre_remover, pos_remover
+)
+import random
 
 @pytest.fixture
 def arvore_padrao():
@@ -70,3 +77,62 @@ def test_pos_condicao_remover():
     arvore.inserir(33)
     arvore.remover(33)
     assert not arvore.buscar(33)
+
+def test_ordem_maior():
+    arvore = BTree(5)
+    for v in range(100):
+        arvore.inserir(v)
+    for v in range(100):
+        assert arvore.buscar(v)
+
+def test_insercao_remocao_aleatoria():
+    arvore = BTree(3)
+    valores = list(range(200))
+    random.shuffle(valores)
+    for v in valores:
+        arvore.inserir(v)
+    random.shuffle(valores)
+    for v in valores[:100]:
+        arvore.remover(v)
+        assert not arvore.buscar(v)
+    for v in valores[100:]:
+        assert arvore.buscar(v)
+
+def test_estrutura_nos_internos():
+    arvore = BTree(3)
+    for i in range(1, 50):
+        arvore.inserir(i)
+    for no in arvore._todos_nos():
+        if not no.folha:
+            assert len(no.filhos) == len(no.chaves) + 1
+
+def test_inserir_em_no_interno_deve_falhar():
+    no = BNode(t=3, folha=False)
+    with pytest.raises(Exception):
+        no.inserir_chave(5)
+
+def test_contratos_pos_condicoes():
+    arvore = BTree(3)
+    for i in range(10, 40, 5):
+        arvore.inserir(i)
+    assert pos_raiz_chaves(arvore)
+    assert pos_no_interno_chaves(arvore)
+    if not arvore.raiz.folha:
+        assert pos_raiz_filhos(arvore)
+    for no in arvore._todos_nos():
+        if no is not arvore.raiz and not no.folha:
+            assert pos_no_interno_filhos(arvore)
+
+def test_contratos_pre():
+    arvore = BTree(3)
+    arvore.inserir(15)
+    assert pre_remover(arvore, 15)
+    assert not pre_remover(arvore, 99)
+    assert pre_inserir(arvore, 99)
+    assert not pre_inserir(arvore, 15)
+
+def test_contratos_pos_remover():
+    arvore = BTree(3)
+    arvore.inserir(42)
+    arvore.remover(42)
+    assert pos_remover(arvore, 42)
