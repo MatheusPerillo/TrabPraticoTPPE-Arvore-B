@@ -97,18 +97,9 @@ class BTree:
             self._inserir_nao_cheio(no.filhos[i], chave)
 
     def _dividir_filhos(self, pai: BNode, indice: int):
-        t = self.t
-        no_cheio = pai.filhos[indice]
-        novo_no = BNode(t, folha=no_cheio.folha)
+        chave_meio, novo_no = pai.filhos[indice].dividir()
 
-        pai.chaves.insert(indice, no_cheio.chaves[t - 1])
-        novo_no.chaves = no_cheio.chaves[t:]
-        no_cheio.chaves = no_cheio.chaves[:t - 1]
-
-        if not no_cheio.folha:
-            novo_no.filhos = no_cheio.filhos[t:]
-            no_cheio.filhos = no_cheio.filhos[:t]
-
+        pai.chaves.insert(indice, chave_meio)
         pai.filhos.insert(indice + 1, novo_no)
 
     def imprimir(self, no=None, nivel=0):
@@ -144,11 +135,11 @@ class BTree:
                 return
             else:
                 if len(no.filhos[idx].chaves) >= t:
-                    pred = self._obter_predecessor(no, idx)
+                    pred = no.filhos[idx].pegar_predecessor()
                     no.chaves[idx] = pred
                     self._remover(no.filhos[idx], pred)
                 elif len(no.filhos[idx + 1].chaves) >= t:
-                    succ = self._obter_sucessor(no, idx)
+                    succ = no.filhos[idx + 1].pegar_sucessor()
                     no.chaves[idx] = succ
                     self._remover(no.filhos[idx + 1], succ)
                 else:
@@ -176,18 +167,6 @@ class BTree:
         while idx < len(no.chaves) and chave > no.chaves[idx]:
             idx += 1
         return idx
-
-    def _obter_predecessor(self, no: BNode, idx: int) -> int:
-        atual = no.filhos[idx]
-        while not atual.folha:
-            atual = atual.filhos[-1]
-        return atual.chaves[-1]
-
-    def _obter_sucessor(self, no: BNode, idx: int) -> int:
-        atual = no.filhos[idx + 1]
-        while not atual.folha:
-            atual = atual.filhos[0]
-        return atual.chaves[0]
 
     def _fundir(self, no: BNode, idx: int):
         filho = no.filhos[idx]
