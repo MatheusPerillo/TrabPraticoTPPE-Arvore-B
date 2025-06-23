@@ -1,1 +1,2 @@
 icontract==2.6.3
+pytest>=7.0.0
