@@ -1,33 +1,29 @@
 from arvore_b.btree import BTree
 
-if __name__ == "__main__":
+def main():
+    print("Criando Árvore-B de ordem 3...")
     t = 3
     arvore = BTree(t)
 
-    elementos = [40, 20, 60, 80, 10, 15, 30, 50, 70, 90,
-                  5, 7, 12, 18, 25, 35, 45, 55, 65, 75, 85, 92, 98, 99]
+    elementos = [5, 7, 10, 12, 15, 18, 20, 25, 30, 35, 40,
+                 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 92, 95, 98, 99]
 
-    for elemento in elementos:
-        arvore.inserir(elemento)
+    for elem in elementos:
+        arvore.inserir(elem)
 
-    print("Árvore original:")
+    print("\n\u00c1rvore-B construída com os elementos:")
     arvore.imprimir()
 
-    print("\nRemovendo 55...")
-    arvore.remover(55)
-    arvore.imprimir()
+    print("\nBuscando alguns valores:")
+    for chave in [25, 55, 99, 100]:
+        encontrado = arvore.buscar(chave)
+        print(f"Buscar({chave}) -> {'Encontrado' if encontrado else 'N\u00e3o encontrado'}")
 
-    print("\nRemovendo 70...")
-    arvore.remover(70)
-    arvore.imprimir()
+    print("\nRemovendo algumas chaves:")
+    for chave in [25, 40, 80]:
+        print(f"Removendo {chave}...")
+        arvore.remover(chave)
+        arvore.imprimir()
 
-    print("\nRemovendo 20...")
-    arvore.remover(20)
-    arvore.imprimir()
-
-    print("\nRemovendo 40...")
-    arvore.remover(40)
-    arvore.imprimir()
-
-
-    print("Implementação inicial da Árvore-B criada.")
+if __name__ == "__main__":
+    main()
