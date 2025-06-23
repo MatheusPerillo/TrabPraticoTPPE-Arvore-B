@@ -44,3 +44,10 @@ pip install -r requirements.txt
 ```bash
 python main.py
 ```
+
+## 🧪 Como rodar os testes automatizados com `pytest`
+
+### 1. Rodar todos os testes
+```bash
+pytest -v tests/
+```
