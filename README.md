@@ -54,6 +54,5 @@ pytest -v tests/
 
 ### 2. Gerar relatório de cobertura
 ```bash
-pip install pytest-cov
 pytest --cov=arvore_b tests/
 ```
