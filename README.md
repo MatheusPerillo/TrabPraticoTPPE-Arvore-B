@@ -41,8 +41,14 @@ pip install -r requirements.txt
 
 ## ▶️ Como rodar o projeto 
 
+### 1. Rodar o projeto com a árvore apresentada na descrição do projeto
 ```bash
 python main.py
+```
+
+### 2. Rodar o projeto com a árvore que testa inserção, busca e remoção de maneira automática
+```bash
+python main_auto.py
 ```
 
 ## 🧪 Como rodar os testes automatizados com `pytest`
